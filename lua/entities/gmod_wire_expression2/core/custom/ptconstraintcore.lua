@@ -379,8 +379,12 @@ e2function number entity:noCollideTo( number index, entity ent2, number bone1, n
 	if success then
 		
 		// Hack to re-enable collisions when no-collide is removed
-		cons:CallOnRemove( 'ActivateCollisions', function( ent ) ent:Input( 'EnableCollisions' ) end )
-		
+		cons:CallOnRemove( 'ActivateCollisions', function( ent, constrained_ent1, constrained_ent2 ) 
+			if IsValid(constrained_ent1) and IsValid(constrained_ent2) then
+				ent:Input( 'EnableCollisions' )
+			end
+		end, ent1, ent2 )
+
 		self.data.constraints[ index ] = cons
 		
 		createConstraintUndo( self, cons )
